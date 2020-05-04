@@ -177,7 +177,13 @@ public static class PhysicsCones
         int j = 0;  // variable to keep track of the number of accepted results
         for (int i = 0; i < numResults; i++)
         {
-            Vector3 hitPoint = results[i].point;
+            Collider hitCollider = results[i].collider;
+            Vector3 hitPos = hitCollider.transform.position;
+            // Calculate the closest point on ray by projecting the vector origin->centerOfCollider on vector direction
+            Vector3 closestPointOnRay = Vector3.Project((hitPos - origin), direction) + origin;
+            // Ask unity the closest point on the collider from the point on the ray we just got
+            Vector3 hitPoint = hitCollider.ClosestPoint(closestPointOnRay);
+
             Vector3 directionToHit = hitPoint - origin;
             float angleToHit = Vector3.Angle(direction, directionToHit);
 
